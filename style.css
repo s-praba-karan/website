@@ -1,58 +1,80 @@
 :root {
   --header-image: url("./assets/images/header.jpg");
   --body-bg-image: url("https://sadhost.neocities.org/images/tiles/stars.gif");
-
-  /* colors */
   --content: #43256e;
 }
 
+/* Font */
 @font-face {
   font-family: "FreePixel";
   src: url("https://sadhost.neocities.org/fonts/FreePixel.ttf");
-}
-
-body {
-  font-family: "FreePixel", sans-serif;
-  margin: 0;
-  background-color: #000000;
-  /* you can delete the line below if you'd prefer to not use an image */
-  background-size: 300px;
-  color: #fceaff;
-  background-image: var(--body-bg-image);
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Base */
+body {
+  font-family: "FreePixel", sans-serif;
+  margin: 0;
+  background-color: #000;
+  background-image: var(--body-bg-image);
+  background-size: 300px;
+  color: #fceaff;
+}
+
+/* Layout container */
 #container {
   max-width: 900px;
   margin: 0 auto;
 }
 
+/* Links */
 #container a {
   color: #ed64f5;
   font-weight: bold;
+  text-decoration: none;
 }
 
+#container a:hover,
+#container a:focus {
+  text-decoration: underline;
+}
+
+a[aria-current="page"] {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Header */
 #header {
   width: 100%;
+  height: 160px;
   background-color: #5e4e8c;
-  height: 50px;
   background-image: var(--header-image);
   background-size: 100%;
+  margin-bottom: 10px;
 }
 
+/* Flex layout */
 #flex {
   display: flex;
 }
 
+/* Sidebar */
 aside {
   background-color: #161616;
   width: 200px;
   padding: 20px;
 }
 
+#leftSidebar {
+  margin-right: 10px;
+  order: 1;
+}
+
+/* Main content */
 main {
   background-color: #161616;
   flex: 1;
@@ -60,22 +82,22 @@ main {
   order: 2;
 }
 
-*/ #leftSidebar {
-  order: 1;
+main p,
+main li {
+  line-height: 1.6;
 }
 
-#rightSidebar {
-  order: 3;
-}
-
+/* Footer */
 footer {
   background-color: #121212;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   padding: 10px;
   text-align: center;
+  margin-top: 10px;
 }
 
+/* Headings */
 h1,
 h2,
 h3 {
@@ -90,39 +112,102 @@ strong {
   color: #ed64f5;
 }
 
-#topBar {
-  width: 100%;
-  height: 30px;
-  padding: 10px;
-  font-size: smaller;
-  background-color: #13092d;
-}
-
+/* Notebook */
 #notebook {
   text-align: center;
 }
+
+/* ===== Mobile ===== */
 @media only screen and (max-width: 800px) {
   #flex {
     flex-wrap: wrap;
   }
 
-  aside {
-    width: 100%;
+  body {
+    background-image: none;
+    background-color: #161616;
   }
 
   main {
     order: 1;
+    position: relative;
+    padding-bottom: 35px;
   }
+
+  /* Separator line */
+    main::after {
+    content: "";
+    position: absolute;
+    left: -16px;
+    right: -16px;
+    bottom: 10px;
+    height: 1px;
+    background-color: var(--content);
+    pointer-events: none; /* ← critical fix */
+  }
+
 
   #leftSidebar {
     order: 2;
+    width: 100%;
+    padding: 16px;
   }
 
-  #rightSidebar {
-    order: 3;
+  main {
+    padding: 16px;
   }
+}
 
-  #navbar ul {
-    flex-wrap: wrap;
+/* ===== Gallery ===== */
+.gallery {
+  column-count: 3;
+  column-gap: 16px;
+  margin-top: 20px;
+}
+
+.gallery img {
+  width: 100%;
+  margin-bottom: 16px;
+  display: block;
+  background: #000;
+  cursor: pointer;
+}
+
+/* Lightbox */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+
+#lightbox img {
+  max-width: 92%;
+  max-height: 92%;
+  background: #000;
+}
+
+#photo-index {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 14px;
+  color: #fceaff;
+  opacity: 0.8;
+  user-select: none;
+}
+
+/* Gallery mobile */
+@media only screen and (max-width: 800px) {
+  .gallery {
+    column-count: 1;
   }
+}
+
+/* Utility */
+body.no-scroll {
+  overflow: hidden;
 }

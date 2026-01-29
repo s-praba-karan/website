@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gallery — Prabakaran</title>
+
+    <link rel="icon" type="image/x-icon" href="../assets/images/favicon.ico" />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="header"></div>
+      <div id="headerArea"></div>
+
+      <div id="flex">
+        <aside id="leftSidebar">
+          <h2>Site Menu</h2>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="./index.html" aria-current="page">Gallery</a></li>
+            <li><a href="../now/index.html">Now</a></li>
+          </ul>
+
+          <h2>Network</h2>
+          <ul>
+            <li><a href="https://github.com/s-praba-karan" target="_blank">Github</a></li>
+            <li><a href="https://www.instagram.com/s_prabakaran_/" target="_blank">Instagram</a></li>
+            <li><a href="https://www.linkedin.com/in/prabakaran-s-b3aab9164/" target="_blank">Linkedin</a></li>
+            <li><a href="mailto:s-prabakaran@tuta.io" target="_blank">Mail</a></li>
+          </ul>
+        </aside>
+
+        <main>
+          <h1>Gallery</h1>
+          <p>A collection of photographs by yours truly</p>
+
+          <div class="gallery">
+            <!-- images unchanged -->
+            <!-- 2023 -->
+            <img src="../assets/gallery/thumbs/2023-001.webp" data-full="../assets/gallery/full/2023-001.webp" alt="2023 photo 1" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2023-002.webp" data-full="../assets/gallery/full/2023-002.webp" alt="2023 photo 2" loading="lazy" />
+
+            <!-- 2024 -->
+            <img src="../assets/gallery/thumbs/2024-001.webp" data-full="../assets/gallery/full/2024-001.webp" alt="2024 photo 1" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-002.webp" data-full="../assets/gallery/full/2024-002.webp" alt="2024 photo 2" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-003.webp" data-full="../assets/gallery/full/2024-003.webp" alt="2024 photo 3" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-004.webp" data-full="../assets/gallery/full/2024-004.webp" alt="2024 photo 4" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-005.webp" data-full="../assets/gallery/full/2024-005.webp" alt="2024 photo 5" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-006.webp" data-full="../assets/gallery/full/2024-006.webp" alt="2024 photo 6" loading="lazy" />
+            <img src="../assets/gallery/thumbs/2024-007.webp" data-full="../assets/gallery/full/2024-007.webp" alt="2024 photo 7" loading="lazy" />
+          </div>
+        </main>
+      </div>
+
+      <footer id="footer">
+        created on 06-03-2022
+      </footer>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+      <span id="photo-index"></span>
+      <img id="lightbox-img" src="" alt="Expanded view" />
+    </div>
+
+
+  <script>
+    const images = Array.from(document.querySelectorAll(".gallery img"));
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const photoIndex = document.getElementById("photo-index");
+
+    let currentIndex = 0;
+    let startX = 0;
+    let endX = 0;
+
+    function updateIndex() {
+      photoIndex.textContent = `${currentIndex + 1} / ${images.length}`;
+    }
+
+    function preloadImage(index) {
+      const img = new Image();
+      img.src = images[index].dataset.full;
+    }
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxImg.src = images[currentIndex].dataset.full;
+      updateIndex();
+      lightbox.style.display = "flex";
+      document.body.classList.add("no-scroll");
+
+      preloadImage((currentIndex + 1) % images.length);
+      preloadImage((currentIndex - 1 + images.length) % images.length);
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+      lightboxImg.src = "";
+      document.body.classList.remove("no-scroll");
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex].dataset.full;
+      updateIndex();
+      preloadImage((currentIndex + 1) % images.length);
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex].dataset.full;
+      updateIndex();
+      preloadImage((currentIndex - 1 + images.length) % images.length);
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener("click", () => openLightbox(index));
+    });
+
+    lightbox.addEventListener("click", closeLightbox);
+
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.style.display !== "flex") return;
+
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") showNext();
+      if (e.key === "ArrowLeft") showPrev();
+    });
+
+    // Touch swipe support
+    lightbox.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    lightbox.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const threshold = 50; // swipe sensitivity
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          showNext(); // swipe left
+        } else {
+          showPrev(); // swipe right
+        }
+      }
+    }
+  </script>
+  </body>
+</html>
+
